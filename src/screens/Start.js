@@ -2,19 +2,20 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, TextInput, Button, Text, ScrollView} from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchThemesRequest} from '../redux/start/actions';
+import {enterChatRequest, fetchThemesRequest} from '../redux/start/actions';
+import {Actions} from 'react-native-router-flux';
 
 export const Start = () => {
-  const [name, setName] = useState();
   const dispatch = useDispatch();
+  const [name, setName] = useState();
   const [subthemes, setSubthemes] = useState([]);
-  const [selectedTheme, setSelectedTheme] = useState([]);
-  const [selectedSubtheme, setSelectedSubtheme] = useState();
+  const [selectedThemeKey, setSelectedThemeKey] = useState([]);
+  const [selectedSubthemeKey, setSelectedSubthemeKey] = useState();
   const [themes, setThemes] = useState([]);
   const fetchedThemes = useSelector((state) => state.themes.themes);
 
   const handleSelectTheme = (value, index) => {
-    setSelectedTheme(value);
+    setSelectedThemeKey(value);
     let arr = [];
     const subthemesTitles = fetchedThemes.filter(
       (theme) => theme.key === value
@@ -26,7 +27,18 @@ export const Start = () => {
   };
 
   const handleSelectSubtheme = (value, index) => {
-    setSelectedSubtheme(value);
+    setSelectedSubthemeKey(value);
+  };
+
+  const handleEnterChat = (event) => {
+    const selectedThemeTitle = fetchedThemes.filter(
+      (theme) => theme.key === selectedThemeKey
+    )[0].data.title;
+    const selectedSubthemeTitle = fetchedThemes.filter(
+      (theme) => theme.key === selectedThemeKey
+    )[0].data.subthemes[selectedSubthemeKey];
+    dispatch(enterChatRequest(name, selectedThemeTitle, selectedSubthemeTitle));
+    Actions.queue();
   };
 
   useEffect(() => {
@@ -54,7 +66,7 @@ export const Start = () => {
       />
       <Picker
         style={styles.form__picker}
-        selectedValue={selectedTheme}
+        selectedValue={selectedThemeKey}
         onValueChange={handleSelectTheme}>
         {themes.map((theme) => (
           <Picker.Item label={theme.label} value={theme.value} />
@@ -62,7 +74,7 @@ export const Start = () => {
       </Picker>
       <Picker
         style={styles.form__picker}
-        selectedValue={selectedSubtheme}
+        selectedValue={selectedSubthemeKey}
         onValueChange={handleSelectSubtheme}>
         {subthemes.map((subtheme) => (
           <Picker.Item label={subtheme.label} value={subtheme.value} />
@@ -71,7 +83,7 @@ export const Start = () => {
       <Button
         style={styles.form__btn}
         title="Войти в чат"
-        //onPress={handleEnterDialog}
+        onPress={handleEnterChat}
       />
     </ScrollView>
   );

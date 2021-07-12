@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
-import {fetchThemesReducer} from './start/fetchThemesReducer';
+import {fetchThemesSaga} from './start/fetchThemesReducer';
 
 export const rootReducer = combineReducers({
-  themes: fetchThemesReducer
+  themes: fetchThemesSaga
 });

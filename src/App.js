@@ -7,6 +7,7 @@ import {rootReducer} from './redux/rootReducer';
 import rootSaga from './redux/rootSaga';
 import {Provider} from 'react-redux';
 import * as Sentry from '@sentry/react-native';
+import {Queue} from './screens/Queue';
 
 Sentry.init({
   dsn: 'https://df9e82dcdbd14fdcb36cbf5816359961@o913672.ingest.sentry.io/5851872'
@@ -26,7 +27,7 @@ export const App = () => {
       <Router>
         <Stack key="root">
           <Scene key="home" component={Start} title="ChatApp" />
-          {/*<Scene key="" component={} title="" />*/}
+          <Scene key="queue" component={Queue} title="ChatApp" />
           {/*<Scene key="" component={} />*/}
         </Stack>
       </Router>
