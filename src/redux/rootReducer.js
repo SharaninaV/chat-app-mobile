@@ -1,6 +1,8 @@
 import {combineReducers} from 'redux';
-import {fetchThemesSaga} from './start/fetchThemesReducer';
+import {fetchThemesReducer} from './start/fetchThemesReducer';
+import {fetchDialogsReducer} from './queue/fetchDialogsReducer';
 
 export const rootReducer = combineReducers({
-  themes: fetchThemesSaga
+  themes: fetchThemesReducer,
+  dialogs: fetchDialogsReducer
 });

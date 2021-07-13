@@ -4,6 +4,7 @@ import {Picker} from '@react-native-community/picker';
 import {useDispatch, useSelector} from 'react-redux';
 import {enterChatRequest, fetchThemesRequest} from '../redux/start/actions';
 import {Actions} from 'react-native-router-flux';
+import {fetchDialogsRequest} from '../redux/queue/actions';
 
 export const Start = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ export const Start = () => {
       (theme) => theme.key === selectedThemeKey
     )[0].data.subthemes[selectedSubthemeKey];
     dispatch(enterChatRequest(name, selectedThemeTitle, selectedSubthemeTitle));
+    dispatch(fetchDialogsRequest());
     Actions.queue();
   };
 
