@@ -5,7 +5,7 @@ const initialState = {
   fetchThemesErrors: {}
 };
 
-export const fetchThemesSaga = (state = initialState, action) => {
+export const fetchThemesReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_THEMES_SUCCESS:
       return {...state, themes: action.payload.themes};
