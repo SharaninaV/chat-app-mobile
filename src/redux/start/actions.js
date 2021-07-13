@@ -26,8 +26,9 @@ export const enterChatRequest = (
   payload: {name, selectedThemeTitle, selectedSubthemeTitle}
 });
 
-export const enterChatSuccess = () => ({
-  type: ENTER_CHAT_SUCCESS
+export const enterChatSuccess = (currentDialogKey) => ({
+  type: ENTER_CHAT_SUCCESS,
+  payload: {currentDialogKey}
 });
 
 export const enterChatFailure = (error) => ({
