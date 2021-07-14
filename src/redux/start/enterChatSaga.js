@@ -5,16 +5,16 @@ import {ENTER_CHAT_REQUEST} from './types';
 
 function* enterChatSaga(action) {
   try {
+    const date = Date.now();
     const refDialogs = yield call(() => firebase.database().ref('dialogs'));
     const newDialog = yield call(() => {
-      const date = Date.now();
       const dialog = {
         clientName: action.payload.name,
         latestActivity: date,
         operatorID: '',
         saved: false,
         status: 'queued',
-        messaqes: [
+        messages: [
           {
             content:
               'Тема: ' +
@@ -31,7 +31,17 @@ function* enterChatSaga(action) {
     yield call(() => {
       refDialogs.push(newDialog);
     });
-    yield put(enterChatSuccess());
+    const currentDialogKey = yield call(() => {
+      let result;
+      refDialogs
+        .orderByChild('latestActivity')
+        .equalTo(date)
+        .once('child_added', (snapshot) => {
+          result = snapshot.key;
+        });
+      return result;
+    });
+    yield put(enterChatSuccess(currentDialogKey));
   } catch (error) {
     yield put(enterChatFailure(error));
   }
