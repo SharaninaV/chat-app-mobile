@@ -14,23 +14,8 @@ export const Queue = () => {
   );
 
   const handleNotifications = (event) => {
-    const userId = deviceState.userId;
-    const notificationObj = {
-      contents: {ru: 'Вам ответил оператор!'},
-      include_player_ids: [userId]
-    };
-
-    const jsonString = JSON.stringify(notificationObj);
-
-    OneSignal.postNotification(
-      jsonString,
-      (success) => {
-        alert('Вам придет уведомление, когда начнется диалог.');
-      },
-      (error) => {
-        alert('Произошла какая-то ошибка.');
-      }
-    );
+    OneSignal.sendTag('dialog', currentDialogKey);
+    OneSignal.getTags((tags) => console.log(tags));
   };
 
   useEffect(() => {
@@ -49,16 +34,10 @@ export const Queue = () => {
         .reverse()
         .map((dialog) => dialog.key);
       if (currentDialogKey) {
-        console.log(queuedDialogsKeys);
-        console.log(queuedDialogsKeys.indexOf(currentDialogKey));
         setQueuePosition(queuedDialogsKeys.indexOf(currentDialogKey) + 1);
       }
     }
   }, [currentDialogKey, dialogs]);
-
-  useEffect(() => {
-    console.log(currentDialogKey);
-  }, [currentDialogKey]);
 
   return (
     <View>
