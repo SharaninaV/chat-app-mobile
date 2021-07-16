@@ -1,6 +1,10 @@
 import React from 'react';
-import {ScrollView} from 'react-native';
+import {ScrollView, Text} from 'react-native';
 
 export const Messages = () => {
-  return <ScrollView>Messages</ScrollView>;
+  return (
+    <ScrollView>
+      <Text>Messages</Text>
+    </ScrollView>
+  );
 };
