@@ -2,35 +2,52 @@ import React from 'react';
 import {Router, Scene, Stack} from 'react-native-router-flux';
 import {Start} from './screens/Start';
 import createSagaMiddleware from 'redux-saga';
-import {applyMiddleware, createStore} from 'redux';
+import { applyMiddleware, compose, createStore } from "redux";
 import {rootReducer} from './redux/rootReducer';
 import rootSaga from './redux/rootSaga';
 import {Provider} from 'react-redux';
 import * as Sentry from '@sentry/react-native';
+import {persistStore, persistReducer} from 'redux-persist';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Queue} from './screens/Queue';
+import {PersistGate} from 'redux-persist/integration/react';
+import {Dialog} from './screens/Dialog';
+import {composeWithDevTools} from 'redux-devtools-extension';
 
 Sentry.init({
   dsn: 'https://df9e82dcdbd14fdcb36cbf5816359961@o913672.ingest.sentry.io/5851872'
 });
 
 const middleware = [];
+const enhancers = [];
 const saga = createSagaMiddleware();
 middleware.push(saga);
+enhancers.push(applyMiddleware(...middleware));
 
-const store = createStore(rootReducer, applyMiddleware(...middleware));
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+  whitelist: ['asyncStorage', 'enterChat']
+};
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+const store = createStore(persistedReducer, composeEnhancers(...enhancers));
+const persistor = persistStore(store);
 
 saga.run(rootSaga);
 
 export const App = () => {
   return (
     <Provider store={store}>
-      <Router>
-        <Stack key="root">
-          <Scene key="home" component={Start} title="ChatApp" />
-          <Scene key="queue" component={Queue} title="ChatApp" />
-          {/*<Scene key="" component={} />*/}
-        </Stack>
-      </Router>
+      <PersistGate persistor={persistor} loading={null}>
+        <Router>
+          <Stack key="root">
+            <Scene key="start" component={Start} title="ChatApp" />
+            <Scene key="queue" component={Queue} title="ChatApp" />
+            <Scene key="dialog" component={Dialog} title="ChatApp" />
+          </Stack>
+        </Router>
+      </PersistGate>
     </Provider>
   );
 };
