@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {usePubNub} from 'pubnub-react';
 import {fetchDialogsRequest} from '../redux/queue/actions';
 import {enterChatReset} from '../redux/start/actions';
+import {sendMessageRequest} from '../redux/dialog/actions';
 
 export const Dialog = () => {
   const pubnub = usePubNub();
@@ -20,7 +21,31 @@ export const Dialog = () => {
     (state) => state.enterChat.currentDialogKey
   );
 
-  const handleSendMessage = (event) => {};
+  const isTypingChannel = currentDialogKey + 'is-typing';
+  const currentChannel = currentDialogKey + 'Chat';
+
+  const handleChangeText = (text) => {
+    setMessage(text);
+    const inputHasText = text.length > 0;
+    pubnub.signal({
+      channel: isTypingChannel,
+      message: inputHasText ? '2' : '0'
+    });
+  };
+
+  const handleSendMessage = (event) => {
+    if (message.length > 0) {
+      const sentMessage = {
+        content: message,
+        timestamp: Date.now(),
+        writtenBy: 'client'
+      };
+      console.log(currentDialogKey);
+      dispatch(sendMessageRequest(currentDialogKey, sentMessage));
+      pubnub.publish({channel: currentChannel, message: sentMessage});
+      setMessage('');
+    }
+  };
 
   const handleFinishDialog = (event) => {
     dispatch(enterChatReset());
@@ -47,11 +72,13 @@ export const Dialog = () => {
           setIsTyping(s.message === '1');
           let timeoutCache = 0;
           clearTimeout(timeoutCache);
-          setTimeout(() => setIsTyping(false), 500);
+          setTimeout(() => setIsTyping(false), 5000);
+          if (s.message === '0' || s.publisher === currentDialogKey) {
+            setIsTyping(false);
+          }
         }
       };
-      const isTypingChannel = currentDialogKey + 'is-typing';
-      const currentChannel = currentDialogKey + 'Chat';
+
       pubnub.addListener(listener);
       pubnub.subscribe({channels: [isTypingChannel, currentChannel]});
 
@@ -84,7 +111,7 @@ export const Dialog = () => {
       <TextInput
         multiline={true}
         numberOfLines={3}
-        onChangeText={(text) => setMessage({text})}
+        onChangeText={handleChangeText}
         value={message}
         placeholder="Введите сообщение..."
       />
