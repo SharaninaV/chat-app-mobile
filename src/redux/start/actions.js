@@ -4,7 +4,8 @@ import {
   FETCH_THEMES_FAILURE,
   ENTER_CHAT_REQUEST,
   ENTER_CHAT_SUCCESS,
-  ENTER_CHAT_FAILURE
+  ENTER_CHAT_FAILURE,
+  ENTER_CHAT_RESET
 } from './types';
 
 export const fetchThemesRequest = () => ({type: FETCH_THEMES_REQUEST});
@@ -34,4 +35,8 @@ export const enterChatSuccess = (currentDialogKey) => ({
 export const enterChatFailure = (error) => ({
   type: ENTER_CHAT_FAILURE,
   payload: {error}
+});
+
+export const enterChatReset = () => ({
+  type: ENTER_CHAT_RESET
 });
