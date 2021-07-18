@@ -43,7 +43,7 @@ export const Start = () => {
     dispatch(enterChatRequest(name, selectedThemeTitle, selectedSubthemeTitle));
     dispatch(fetchDialogsRequest());
     dispatch(changeDefaultScreen('queue'));
-    setTimeout(Actions.queue(), 500);
+    //Actions.queue();
   };
 
   useEffect(() => {

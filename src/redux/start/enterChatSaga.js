@@ -14,8 +14,8 @@ function* enterChatSaga(action) {
         operatorID: '',
         saved: false,
         status: 'queued',
-        messages: [
-          {
+        messages: {
+          [date]: {
             content:
               'Тема: ' +
               action.payload.selectedThemeTitle +
@@ -24,7 +24,7 @@ function* enterChatSaga(action) {
             timestamp: date,
             writtenBy: 'client'
           }
-        ]
+        }
       };
       return dialog;
     });
