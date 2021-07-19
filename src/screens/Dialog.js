@@ -11,9 +11,8 @@ export const Dialog = () => {
   const dispatch = useDispatch();
 
   const handleFinishDialog = (event) => {
-    dispatch(enterChatReset());
-    dispatch(changeDefaultScreen('start'));
-    Actions.start();
+    dispatch(changeDefaultScreen('finish'));
+    Actions.finish();
   };
 
   return (

@@ -5,6 +5,7 @@ import FetchDialogsSaga from '../redux/queue/fetchDialogsSaga';
 import GetDeviceStateSaga from '../redux/deviceState/getDeviceStateSaga';
 import SendMessageSaga from '../redux/dialog/sendMessageSaga';
 import UploadToStorageSaga from '../redux/camera/uploadToStorageSaga';
+import FinishDialogSaga from '../redux/finishDialog/finishDialogSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -13,6 +14,7 @@ export default function* rootSaga() {
     FetchDialogsSaga,
     GetDeviceStateSaga,
     SendMessageSaga,
-    UploadToStorageSaga
+    UploadToStorageSaga,
+    FinishDialogSaga
   ]);
 }
