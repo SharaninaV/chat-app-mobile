@@ -7,7 +7,6 @@ const initialState = {
 export const enterChatReducer = (state = initialState, action) => {
   switch (action.type) {
     case ENTER_CHAT_SUCCESS:
-      console.log(action.payload.currentDialogKey);
       return {...state, currentDialogKey: action.payload.currentDialogKey};
     case ENTER_CHAT_RESET:
       return initialState;

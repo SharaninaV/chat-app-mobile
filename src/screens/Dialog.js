@@ -4,6 +4,7 @@ import {changeDefaultScreen} from '../redux/asyncStorage/actions';
 import {Actions} from 'react-native-router-flux';
 import {useDispatch, useSelector} from 'react-redux';
 import {usePubNub} from 'pubnub-react';
+
 import {fetchDialogsRequest} from '../redux/queue/actions';
 import {enterChatReset} from '../redux/start/actions';
 import {sendMessageRequest} from '../redux/dialog/actions';
@@ -40,7 +41,6 @@ export const Dialog = () => {
         timestamp: Date.now(),
         writtenBy: 'client'
       };
-      console.log(currentDialogKey);
       dispatch(sendMessageRequest(currentDialogKey, sentMessage));
       pubnub.publish({channel: currentChannel, message: sentMessage});
       setMessage('');
@@ -114,6 +114,12 @@ export const Dialog = () => {
         onChangeText={handleChangeText}
         value={message}
         placeholder="Введите сообщение..."
+      />
+      <Button
+        title="Изображение"
+        onPress={() => {
+          Actions.camera();
+        }}
       />
       <Button title="Отправить" onPress={handleSendMessage} />
       <Button title="Завершить диалог" onPress={handleFinishDialog} />

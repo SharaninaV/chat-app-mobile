@@ -4,7 +4,6 @@ import firebase from '../../firebase/firebase';
 import {sendMessageSuccess, sendMessageFailure} from './actions';
 
 function* sendMessageSaga(action) {
-  console.log('saga');
   try {
     const refMessages = firebase
       .database()
@@ -14,7 +13,6 @@ function* sendMessageSaga(action) {
           '/messages/' +
           action.payload.message.timestamp
       );
-    console.log(refMessages);
     yield call(() => refMessages.set(action.payload.message));
     const refActivity = firebase
       .database()
