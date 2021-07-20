@@ -9,7 +9,7 @@ import {enterChatReset} from '../redux/start/actions';
 
 export const FinishDialog = () => {
   const dispatch = useDispatch();
-  const [rating, setRating] = useState('0');
+  const [rating, setRating] = useState('5');
   const currentDialogKey = useSelector(
     (state) => state.enterChat.currentDialogKey
   );
