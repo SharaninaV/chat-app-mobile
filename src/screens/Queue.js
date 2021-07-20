@@ -26,7 +26,7 @@ export const Queue = () => {
   const waitSeconds = waitTime - waitHours * 3600 - waitMinutes * 60;
 
   useEffect(() => {
-    if (dialogs && dialogs.length > 0 && currentDialogKey) {
+    if (dialogs && dialogs.length > 0 && currentDialogKey.length > 0) {
       const queuedDialogsKeys = dialogs
         .filter((dialog) => dialog.data.status === 'queued')
         .reverse()
@@ -34,10 +34,19 @@ export const Queue = () => {
       if (currentDialogKey) {
         setQueuePosition(queuedDialogsKeys.indexOf(currentDialogKey) + 1);
       }
-      const currentDialogStatus = dialogs.filter(
-        (dialog) => dialog.key === currentDialogKey
-      )[0].data.status;
-      if (currentDialogStatus) {
+      if (
+        dialogs &&
+        dialogs.length > 0 &&
+        currentDialogKey &&
+        currentDialogKey.length > 0
+      ) {
+        const currentDialog = dialogs.filter(
+          (dialog) => dialog.key === currentDialogKey
+        );
+        const currentDialogStatus =
+          currentDialog && currentDialog.length > 0
+            ? currentDialog[0].data.status
+            : '';
         if (currentDialogStatus === 'active') {
           dispatch(changeDefaultScreen('dialog'));
           Actions.dialog();
