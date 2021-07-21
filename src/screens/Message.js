@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {Animated, Text} from 'react-native';
+import { Animated, StyleSheet, Text } from "react-native";
 
 export const Message = ({style, msg}) => {
   const animation = useRef(new Animated.Value(0)).current;
@@ -11,9 +11,25 @@ export const Message = ({style, msg}) => {
   const animatedStyle = msg.isNew ? {...style, opacity: animation} : style;
 
   return (
-    <Animated.View style={animatedStyle}>
-      {msg.writtenBy === 'operator' ? <Text>Оператор:</Text> : <Text>Вы:</Text>}
-      <Text>{msg.content}</Text>
-    </Animated.View>
+    <>
+      {msg.writtenBy === 'operator' ? (
+          <Animated.View style={animatedStyle}>
+        <Text>Оператор:</Text>
+      <Text style={styles.messageOperator__text}>{msg.content}</Text>
+    </Animated.View>) : (
+          <Animated.View style={animatedStyle}>
+   <Text style={styles.messageClient__text}>Вы:</Text>
+            <Text style={styles.messageClient__text}>{msg.content}</Text>
+          </Animated.View>)}
+    </>
   );
 };
+
+const styles = StyleSheet.create({
+  messageOperator__text: {
+    color: 'black'
+  },
+  messageClient__text: {
+    color: 'white'
+  }
+})

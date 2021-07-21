@@ -83,8 +83,7 @@ const styles = StyleSheet.create({
   messageClient: {
     flex: 1,
     padding: 20,
-    color: 'white',
-    backgroundColor: 'cyan',
+    backgroundColor: 'dodgerblue',
     marginTop: 20,
     marginLeft: 100,
     marginRight: 20,
@@ -94,8 +93,7 @@ const styles = StyleSheet.create({
   messageOperator: {
     flex: 1,
     padding: 20,
-    color: 'white',
-    backgroundColor: 'black',
+    backgroundColor: '#B1E0E9',
     marginTop: 20,
     marginRight: 100,
     marginLeft: 20,
