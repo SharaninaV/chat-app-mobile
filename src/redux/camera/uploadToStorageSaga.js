@@ -6,7 +6,6 @@ import RNFS from 'react-native-fs';
 import Buffer from 'buffer';
 
 function* uploadToStorageSaga(action) {
-  console.log('saga');
   try {
     const storageRef = firebase.storage().ref().child('images');
     const filePathSplit = action.payload.uri.split('/');
@@ -14,6 +13,10 @@ function* uploadToStorageSaga(action) {
     const imageRef = storageRef.child(fileName);
     yield call(() => {
       RNFS.readFile(action.payload.uri, 'base64').then((data) => {
+        const newFilePath = RNFS.ExternalDirectoryPath + '/test.txt';
+        RNFS.writeFile(newFilePath, data, 'base64').then((r) =>
+          console.log('success')
+        );
         imageRef.putString(data, 'base64').then((snapshot) => {
           console.log('Uploaded!');
         });
