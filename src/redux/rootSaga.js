@@ -4,8 +4,10 @@ import EnterChatSaga from '../redux/start/enterChatSaga';
 import FetchDialogsSaga from '../redux/queue/fetchDialogsSaga';
 import GetDeviceStateSaga from '../redux/deviceState/getDeviceStateSaga';
 import SendMessageSaga from '../redux/dialog/sendMessageSaga';
-import UploadToStorageSaga from '../redux/camera/uploadToStorageSaga';
+import UploadToStorageSaga from './camera/uploadPhotoSaga';
 import FinishDialogSaga from '../redux/finishDialog/finishDialogSaga';
+import FetchCurrentDialogSaga from '../redux/dialog/fetchCurrentDialogSaga';
+import FetchDialogStatusSaga from '../redux/queue/fetchDialogStatusSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -15,6 +17,8 @@ export default function* rootSaga() {
     GetDeviceStateSaga,
     SendMessageSaga,
     UploadToStorageSaga,
-    FinishDialogSaga
+    FinishDialogSaga,
+    FetchCurrentDialogSaga,
+    FetchDialogStatusSaga
   ]);
 }

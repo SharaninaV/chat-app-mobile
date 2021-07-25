@@ -1,15 +1,15 @@
 import {
-  UPLOAD_TO_STORAGE_REQUEST,
-  UPLOAD_TO_STORAGE_SUCCESS,
-  UPLOAD_TO_STORAGE_FAILURE
+  UPLOAD_PHOTO_REQUEST,
+  UPLOAD_PHOTO_SUCCESS,
+  UPLOAD_PHOTO_FAILURE
 } from './types';
 
-export const uploadToStorageRequest = (uri) => ({
-  type: UPLOAD_TO_STORAGE_REQUEST,
-  payload: {uri}
+export const uploadPhotoRequest = (key, message, filePath) => ({
+  type: UPLOAD_PHOTO_REQUEST,
+  payload: {key, message, filePath}
 });
-export const uploadToStorageSuccess = () => ({type: UPLOAD_TO_STORAGE_SUCCESS});
-export const uploadToStorageFailure = (error) => ({
-  type: UPLOAD_TO_STORAGE_FAILURE,
+export const uploadPhotoSuccess = () => ({type: UPLOAD_PHOTO_SUCCESS});
+export const uploadPhotoFailure = (error) => ({
+  type: UPLOAD_PHOTO_FAILURE,
   payload: {error}
 });

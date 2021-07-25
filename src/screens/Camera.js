@@ -7,8 +7,9 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
-import {useDispatch} from 'react-redux';
-import {uploadToStorageRequest} from '../redux/camera/actions';
+import { useDispatch, useSelector } from "react-redux";
+import { uploadPhotoRequest, uploadToStorageRequest } from "../redux/camera/actions";
+import { Actions } from "react-native-router-flux";
 
 export const Camera = ({initialProps}) => {
   const [
@@ -20,20 +21,29 @@ export const Camera = ({initialProps}) => {
 
   const dispatch = useDispatch();
 
+  const currentDialogKey = useSelector((state) => state.enterChat.currentDialogKey)
+
   const handleTakePicture = async () => {
     try {
       const data = await takePicture();
       setFilePath(data.uri);
+      Actions.dialog();
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if (filePath && filePath.length > 0) {
-      dispatch(uploadToStorageRequest(filePath));
+    const date = Date.now()
+    if (filePath && filePath.length > 0 && currentDialogKey) {
+      const message = {
+        content: filePath,
+        timestamp: date,
+        writtenBy: 'client'
+      }
+      dispatch(uploadPhotoRequest(currentDialogKey, message, filePath));
     }
-  }, [filePath, dispatch]);
+  }, [filePath, dispatch, currentDialogKey]);
 
   return (
     <View style={{flex: 1}}>
@@ -44,8 +54,6 @@ export const Camera = ({initialProps}) => {
         ratio={ratio}
         style={{flex: 1}}
         autoFocus={autoFocus}
-        //onTextRecognized={textRecognized}
-        //onFacesDetected={facesDetected}
       />
 
       <TouchableWithoutFeedback
@@ -63,22 +71,6 @@ export const Camera = ({initialProps}) => {
         title="Сменить камеру"
       />
 
-      {/*{!isRecording && (*/}
-      {/*  <TouchableOpacity*/}
-      {/*    onPress={async () => {*/}
-      {/*      try {*/}
-      {/*        setIsRecording(true);*/}
-      {/*        const data = await recordVideo();*/}
-      {/*        console.warn(data);*/}
-      {/*      } catch (error) {*/}
-      {/*        console.warn(error);*/}
-      {/*      } finally {*/}
-      {/*        setIsRecording(false);*/}
-      {/*      }*/}
-      {/*    }}*/}
-      {/*    style={{width: '100%', height: 45}}*/}
-      {/*  />*/}
-      {/*)}*/}
       <Button onPress={handleTakePicture} title="Фото" />
     </View>
   );

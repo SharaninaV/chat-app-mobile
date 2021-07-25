@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import { Button, Text, TextInput, View } from "react-native";
+import {Button, Text, TextInput, View} from 'react-native';
 import {sendMessageRequest} from '../redux/dialog/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {usePubNub} from 'pubnub-react';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export const WriteMessage = () => {
   const dispatch = useDispatch();
@@ -41,41 +42,52 @@ export const WriteMessage = () => {
   };
 
   useEffect(() => {
-    if (pubnub && currentDialogKey) {
+    if (pubnub && currentDialogKey && currentDialogKey.length) {
+      pubnub.subscribe({channels: [isTypingChannel]});
       pubnub.setUUID(currentDialogKey);
       const listener = {
         signal: (s) => {
           setIsTyping(s.message === '1');
-          let timeoutCache = 0;
-          clearTimeout(timeoutCache);
           setTimeout(() => setIsTyping(false), 5000);
-          if (s.message === '0' || s.publisher === currentDialogKey) {
-            setIsTyping(false);
-          }
         }
       };
 
       pubnub.addListener(listener);
-      pubnub.subscribe({channels: [isTypingChannel, currentChannel]});
 
       return () => {
         pubnub.removeListener(listener);
         pubnub.unsubscribeAll();
       };
     }
-  }, [currentChannel, currentDialogKey, isTypingChannel, pubnub]);
+  }, [currentDialogKey, isTypingChannel, pubnub]);
 
   return (
     <View>
       {isTyping && <Text>Оператор печатает...</Text>}
-      <TextInput
-        multiline={true}
-        numberOfLines={3}
-        onChangeText={handleChangeText}
-        value={message}
-        placeholder="Введите сообщение..."
-      />
-      <Button title="Отправить" onPress={handleSendMessage} />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+        <View style={{flex: 4}}>
+          <TextInput
+            multiline={true}
+            numberOfLines={3}
+            onChangeText={handleChangeText}
+            value={message}
+            placeholder="Сообщение..."
+          />
+        </View>
+        <View style={{flex: 1}}>
+          <Icon
+            name="paper-plane"
+            size={35}
+            color="dodgerblue"
+            onPress={handleSendMessage}
+          />
+        </View>
+      </View>
     </View>
   );
 };

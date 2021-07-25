@@ -1,9 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Animated, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {usePubNub} from 'pubnub-react';
 import {Message} from './Message';
-import {fetchDialogsRequest} from '../redux/queue/actions';
+import {fetchCurrentDialogRequest} from '../redux/dialog/actions';
+import {changeDefaultScreen} from '../redux/asyncStorage/actions';
 
 export const ViewMessages = () => {
   const pubnub = usePubNub();
@@ -12,17 +13,17 @@ export const ViewMessages = () => {
   const scrollViewRef = useRef();
 
   const [messages, setMessages] = useState([]);
-
-  const dialogs = useSelector((state) => state.dialogs.dialogs);
+  const currentDialog = useSelector(
+    (state) => state.currentDialog.currentDialog
+  );
   const currentDialogKey = useSelector(
     (state) => state.enterChat.currentDialogKey
   );
 
-  const isTypingChannel = currentDialogKey + 'is-typing';
   const currentChannel = currentDialogKey + 'Chat';
 
   useEffect(() => {
-    if (pubnub && currentDialogKey) {
+    if (pubnub && currentDialogKey && currentDialogKey.length) {
       pubnub.setUUID(currentDialogKey);
       const listener = {
         message: (envelope) => {
@@ -39,27 +40,26 @@ export const ViewMessages = () => {
       };
 
       pubnub.addListener(listener);
-      pubnub.subscribe({channels: [isTypingChannel, currentChannel]});
+      pubnub.subscribe({channels: [currentChannel]});
 
       return () => {
         pubnub.removeListener(listener);
         pubnub.unsubscribeAll();
       };
     }
-  }, [currentChannel, currentDialogKey, isTypingChannel, pubnub]);
+  }, [currentChannel, currentDialogKey, pubnub]);
 
   useEffect(() => {
-    if (dialogs && dialogs.length > 0 && currentDialogKey) {
-      const currentDialog = dialogs.filter(
-        (dialog) => dialog.key === currentDialogKey
-      );
-      if (currentDialog) {
-        setMessages(Object.values(currentDialog[0].data.messages));
-      }
-    } else {
-      dispatch(fetchDialogsRequest());
+    if (currentDialog && Object.keys(currentDialog).length) {
+      setMessages(Object.values(currentDialog.messages));
     }
-  }, [dialogs, currentDialogKey, dispatch]);
+  }, [currentDialog]);
+
+  useEffect(() => {
+    if (currentDialogKey && currentDialogKey.length) {
+      dispatch(fetchCurrentDialogRequest(currentDialogKey));
+    }
+  }, [dispatch, currentDialogKey]);
 
   return (
     <ScrollView
