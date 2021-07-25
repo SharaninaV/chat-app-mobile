@@ -1,5 +1,7 @@
 import React, {useEffect, useRef} from 'react';
-import { Animated, StyleSheet, Text } from "react-native";
+import { Animated, Image, StyleSheet, Text } from "react-native";
+import moment from 'moment';
+import 'moment/locale/ru'
 
 export const Message = ({style, msg}) => {
   const animation = useRef(new Animated.Value(0)).current;
@@ -13,14 +15,22 @@ export const Message = ({style, msg}) => {
   return (
     <>
       {msg.writtenBy === 'operator' ? (
-          <Animated.View style={animatedStyle}>
-        <Text>Оператор:</Text>
-      <Text style={styles.messageOperator__text}>{msg.content}</Text>
-    </Animated.View>) : (
-          <Animated.View style={animatedStyle}>
-   <Text style={styles.messageClient__text}>Вы:</Text>
+        <Animated.View style={animatedStyle}>
+          <Text>Оператор:</Text>
+          <Text style={styles.messageOperator__text}>{msg.content}</Text>
+          <Text>{moment(msg.timestamp).calendar()}</Text>
+        </Animated.View>
+      ) : (
+        <Animated.View style={animatedStyle}>
+          <Text style={styles.messageClient__text}>Вы:</Text>
+          {msg.content.startsWith('data:image') ?
+            <Image source={{uri: msg.content, height: 200, resizeMethod: 'resize'}}/>
+            :
             <Text style={styles.messageClient__text}>{msg.content}</Text>
-          </Animated.View>)}
+          }
+          <Text style={styles.messageClient__text}>{moment(msg.timestamp).calendar()}</Text>
+        </Animated.View>
+      )}
     </>
   );
 };
@@ -32,4 +42,4 @@ const styles = StyleSheet.create({
   messageClient__text: {
     color: 'white'
   }
-})
+});
