@@ -25,7 +25,8 @@ export const Camera = ({initialProps}) => {
 
   const handleTakePicture = async () => {
     try {
-      const data = await takePicture();
+      const options = {quality: 0.5}
+      const data = await takePicture(options);
       setFilePath(data.uri);
       Actions.dialog();
     } catch (error) {
