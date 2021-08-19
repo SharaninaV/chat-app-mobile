@@ -1,45 +1,64 @@
-import React, {useEffect, useRef} from 'react';
-import { Animated, Image, StyleSheet, Text } from "react-native";
-import moment from 'moment';
-import 'moment/locale/ru'
+import React, { useEffect, useRef } from "react";
+import { Animated, Image, StyleSheet, Text, View } from "react-native";
+import moment from "moment";
+import "moment/locale/ru";
 
-export const Message = ({style, msg}) => {
+export const Message = ({ style, msg }) => {
   const animation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.timing(animation, {toValue: 1, duration: 1000}).start();
+    Animated.timing(animation, { toValue: 1, duration: 1000 }).start();
   }, [animation]);
 
-  const animatedStyle = msg.isNew ? {...style, opacity: animation} : style;
+  const animatedStyle = msg.isNew ? { ...style, opacity: animation } : style;
 
   return (
-    <>
-      {msg.writtenBy === 'operator' ? (
+    <View style={styles.message}>
+      {msg.writtenBy === "operator" ? (
         <Animated.View style={animatedStyle}>
-          <Text>Оператор:</Text>
-          <Text style={styles.messageOperator__text}>{msg.content}</Text>
-          <Text>{moment(msg.timestamp).calendar()}</Text>
+          <Text style={styles.message__operator__writtenBy}>Оператор:</Text>
+          <Text style={styles.message__operator__text}>{msg.content}</Text>
+          <Text style={styles.message__operator__date}>({moment(msg.timestamp).calendar()})</Text>
         </Animated.View>
       ) : (
         <Animated.View style={animatedStyle}>
-          <Text style={styles.messageClient__text}>Вы:</Text>
-          {msg.content.startsWith('data:image') ?
-            <Image source={{uri: msg.content, height: 200, resizeMethod: 'resize'}}/>
+          <Text style={styles.message__client__writtenBy}>Вы:</Text>
+          {msg.content.startsWith("data:image") ?
+            <Image source={{ uri: msg.content, height: 200, resizeMethod: "resize" }} />
             :
-            <Text style={styles.messageClient__text}>{msg.content}</Text>
+            <Text style={styles.message__client__text}>{msg.content}</Text>
           }
-          <Text style={styles.messageClient__text}>{moment(msg.timestamp).calendar()}</Text>
+          <Text style={styles.message__client__date}>({moment(msg.timestamp).calendar()})</Text>
         </Animated.View>
       )}
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  messageOperator__text: {
-    color: 'black'
+  message: {},
+  message__operator__writtenBy: {
+    color: "white",
+    fontFamily: "Montserrat-Bold",
   },
-  messageClient__text: {
-    color: 'white'
-  }
+  message__operator__text: {
+    color: "white",
+    fontFamily: "Montserrat-Medium",
+  },
+  message__operator__date: {
+    color: "white",
+    fontFamily: "Montserrat-Medium",
+  },
+  message__client__writtenBy: {
+    color: "white",
+    fontFamily: "Montserrat-Bold",
+  },
+  message__client__text: {
+    color: "white",
+    fontFamily: "Montserrat-Medium",
+  },
+  message__client__date: {
+    color: "white",
+    fontFamily: "Montserrat-Medium",
+  },
 });

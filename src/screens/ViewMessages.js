@@ -1,10 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {usePubNub} from 'pubnub-react';
-import {Message} from './Message';
-import {fetchCurrentDialogRequest} from '../redux/dialog/actions';
-import {changeDefaultScreen} from '../redux/asyncStorage/actions';
+import React, { useEffect, useRef, useState } from "react";
+import { ScrollView, StyleSheet } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { usePubNub } from "pubnub-react";
+import { Message } from "./Message";
+import { fetchCurrentDialogRequest } from "../redux/dialog/actions";
 
 export const ViewMessages = () => {
   const pubnub = usePubNub();
@@ -14,13 +13,13 @@ export const ViewMessages = () => {
 
   const [messages, setMessages] = useState([]);
   const currentDialog = useSelector(
-    (state) => state.currentDialog.currentDialog
+    (state) => state.currentDialog.currentDialog,
   );
   const currentDialogKey = useSelector(
-    (state) => state.enterChat.currentDialogKey
+    (state) => state.enterChat.currentDialogKey,
   );
 
-  const currentChannel = currentDialogKey + 'Chat';
+  const currentChannel = currentDialogKey + "Chat";
 
   useEffect(() => {
     if (pubnub && currentDialogKey && currentDialogKey.length) {
@@ -33,14 +32,14 @@ export const ViewMessages = () => {
               writtenBy: envelope.message.writtenBy,
               content: envelope.message.content,
               timestamp: envelope.message.timestamp,
-              isNew: true
-            }
+              isNew: true,
+            },
           ]);
-        }
+        },
       };
 
       pubnub.addListener(listener);
-      pubnub.subscribe({channels: [currentChannel]});
+      pubnub.subscribe({ channels: [currentChannel] });
 
       return () => {
         pubnub.removeListener(listener);
@@ -65,39 +64,39 @@ export const ViewMessages = () => {
     <ScrollView
       ref={scrollViewRef}
       onContentSizeChange={() =>
-        scrollViewRef.current.scrollToEnd({animated: true})
-      }>
+        scrollViewRef.current.scrollToEnd({ animated: true })
+      }
+      style={styles.messages}>
       {messages &&
-        messages.map((msg) =>
-          msg.writtenBy === 'operator' ? (
-            <Message style={styles.messageOperator} msg={msg} />
-          ) : (
-            <Message style={styles.messageClient} msg={msg} />
-          )
-        )}
+      messages.map((msg) =>
+        msg.writtenBy === "operator" ? (
+          <Message style={styles.messages__operator} msg={msg} />
+        ) : (
+          <Message style={styles.messages__client} msg={msg} />
+        ),
+      )}
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  messageClient: {
+  messages: {},
+  messages__client: {
     flex: 1,
     padding: 20,
-    backgroundColor: 'dodgerblue',
-    marginTop: 20,
+    backgroundColor: "#028dae",
+    marginVertical: 20,
     marginLeft: 100,
     marginRight: 20,
-    marginBottom: 20,
-    borderRadius: 10
+    borderRadius: 10,
   },
-  messageOperator: {
+  messages__operator: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#B1E0E9',
-    marginTop: 20,
+    backgroundColor: "#00b9e4",
+    marginVertical: 20,
     marginRight: 100,
     marginLeft: 20,
-    marginBottom: 20,
-    borderRadius: 10
-  }
+    borderRadius: 10,
+  },
 });
