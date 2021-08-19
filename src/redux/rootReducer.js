@@ -6,6 +6,7 @@ import {enterChatReducer} from './start/enterChatReducer';
 import {asyncStorageReducer} from './asyncStorage/asyncStorageReducer';
 import {fetchCurrentDialogReducer} from './dialog/fetcchCurrentDialogReducer';
 import {fetchDialogStatusReducer} from './queue/fetchDialogStatusReducer';
+import {filePathReducer} from "./camera/filePathReducer";
 
 export const rootReducer = combineReducers({
   themes: fetchThemesReducer,
@@ -14,5 +15,6 @@ export const rootReducer = combineReducers({
   enterChat: enterChatReducer,
   asyncStorage: asyncStorageReducer,
   currentDialog: fetchCurrentDialogReducer,
-  dialogStatus: fetchDialogStatusReducer
+  dialogStatus: fetchDialogStatusReducer,
+  filePath: filePathReducer
 });

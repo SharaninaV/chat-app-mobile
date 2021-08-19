@@ -35,7 +35,6 @@ function* uploadPhotoSaga(action) {
     );
     yield put(uploadPhotoSuccess());
   } catch (error) {
-    console.log(error);
     yield put(uploadPhotoFailure(error));
   }
 }
