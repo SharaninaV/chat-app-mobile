@@ -8,7 +8,7 @@ import {
   View
 } from 'react-native';
 import { useDispatch, useSelector } from "react-redux";
-import { uploadPhotoRequest, uploadToStorageRequest } from "../redux/camera/actions";
+import { saveFilePath, uploadPhotoRequest, uploadToStorageRequest } from "../redux/camera/actions";
 import { Actions } from "react-native-router-flux";
 
 export const Camera = ({initialProps}) => {
@@ -17,33 +17,24 @@ export const Camera = ({initialProps}) => {
     {toggleFacing, touchToFocus, takePicture}
   ] = useCamera(initialProps);
 
-  const [filePath, setFilePath] = useState('');
-
   const dispatch = useDispatch();
-
-  const currentDialogKey = useSelector((state) => state.enterChat.currentDialogKey)
 
   const handleTakePicture = async () => {
     try {
-      const data = await takePicture();
-      setFilePath(data.uri);
-      Actions.dialog();
+      const options = {quality: 0.5}
+      const data = await takePicture(options);
+      // console.log(data)
+      console.log('filepath', data.uri)
+      dispatch(saveFilePath(data.uri))
+      Actions.preview();
     } catch (error) {
-      console.log(error);
+      return error
     }
   };
 
-  useEffect(() => {
-    const date = Date.now()
-    if (filePath && filePath.length > 0 && currentDialogKey) {
-      const message = {
-        content: filePath,
-        timestamp: date,
-        writtenBy: 'client'
-      }
-      dispatch(uploadPhotoRequest(currentDialogKey, message, filePath));
-    }
-  }, [filePath, dispatch, currentDialogKey]);
+  const handleGoBack = event => {
+    Actions.dialog()
+  }
 
   return (
     <View style={{flex: 1}}>
@@ -72,6 +63,8 @@ export const Camera = ({initialProps}) => {
       />
 
       <Button onPress={handleTakePicture} title="Фото" />
+
+      <Button title="Назад" onPress={handleGoBack}/>
     </View>
   );
 };
