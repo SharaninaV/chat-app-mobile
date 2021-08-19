@@ -1,70 +1,91 @@
-import React, {useEffect, useState} from 'react';
-import {RNCamera} from 'react-native-camera';
-import {useCamera} from 'react-native-camera-hooks';
-
+import React from "react";
+import { RNCamera } from "react-native-camera";
+import { useCamera } from "react-native-camera-hooks";
 import {
-  Button,
-  TouchableWithoutFeedback,
-  View
-} from 'react-native';
-import { useDispatch, useSelector } from "react-redux";
-import { saveFilePath, uploadPhotoRequest, uploadToStorageRequest } from "../redux/camera/actions";
+  StyleSheet, Text, TouchableOpacity, View,
+} from "react-native";
+import { useDispatch } from "react-redux";
 import { Actions } from "react-native-router-flux";
+import { saveFilePath } from "../redux/camera/actions";
 
-export const Camera = ({initialProps}) => {
+export const Camera = ({ initialProps }) => {
   const [
-    {cameraRef, type, ratio, autoFocus, autoFocusPoint},
-    {toggleFacing, touchToFocus, takePicture}
+    { cameraRef, type, ratio, autoFocus, autoFocusPoint },
+    { toggleFacing, takePicture },
   ] = useCamera(initialProps);
 
   const dispatch = useDispatch();
 
   const handleTakePicture = async () => {
     try {
-      const options = {quality: 0.5}
+      const options = { quality: 0.1 };
       const data = await takePicture(options);
-      // console.log(data)
-      console.log('filepath', data.uri)
-      dispatch(saveFilePath(data.uri))
+      dispatch(saveFilePath(data.uri));
       Actions.preview();
     } catch (error) {
-      return error
+      return error;
     }
   };
 
   const handleGoBack = event => {
-    Actions.dialog()
-  }
+    Actions.dialog();
+  };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.camera}>
       <RNCamera
         ref={cameraRef}
         autoFocusPointOfInterest={autoFocusPoint.normalized}
         type={type}
         ratio={ratio}
-        style={{flex: 1}}
+        style={styles.camera__view}
         autoFocus={autoFocus}
       />
-
-      <TouchableWithoutFeedback
-        style={{
-          flex: 1
-        }}
-        onPress={touchToFocus}>
-        <View></View>
-      </TouchableWithoutFeedback>
-
-      <Button
-        testID="button"
-        onPress={toggleFacing}
-        style={{width: '100%', height: 45}}
-        title="Сменить камеру"
-      />
-
-      <Button onPress={handleTakePicture} title="Фото" />
-
-      <Button title="Назад" onPress={handleGoBack}/>
+      <View style={styles.camera__view__buttons}>
+        <TouchableOpacity
+          testID="button"
+          onPress={toggleFacing}
+          style={styles.camera__view__buttons__item}
+        >
+          <Text style={styles.camera__view__buttons__item__text}>Сменить камеру</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleTakePicture}
+          style={styles.camera__view__buttons__item}
+        >
+          <Text style={styles.camera__view__buttons__item__text}>Фото</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.camera__view__buttons__item}
+          onPress={handleGoBack}
+        >
+          <Text style={styles.camera__view__buttons__item__text}>Назад</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  camera: { flex: 1 },
+  camera__view: { flex: 1 },
+  camera__view__buttons: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  camera__view__buttons__item: {
+    flex: 1,
+    backgroundColor: "white",
+    borderColor: "white",
+    alignItems: "center",
+    padding: 10,
+    height: 70,
+  },
+  camera__view__buttons__item__text: {
+    fontFamily: "Montserrat-Medium",
+    textTransform: "uppercase",
+    textAlign: "center",
+    color: "#028dae",
+  },
+});
