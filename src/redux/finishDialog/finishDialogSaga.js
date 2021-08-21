@@ -1,7 +1,7 @@
 import {call, put, takeLatest} from 'redux-saga/effects';
-import {FINISH_DIALOG_REQUEST} from './types';
 import firebase from '../../firebase/firebase';
 import {finishDialogFailure, finishDialogSuccess} from './actions';
+import {FINISH_DIALOG_REQUEST} from './types';
 
 function* finishDialogSaga(action) {
   try {

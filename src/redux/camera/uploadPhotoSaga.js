@@ -1,8 +1,8 @@
 import {call, put, takeLatest} from 'redux-saga/effects';
-import {uploadPhotoFailure, uploadPhotoSuccess} from './actions';
-import {UPLOAD_PHOTO_REQUEST} from './types';
 import firebase from '../../firebase/firebase';
 import RNFS from 'react-native-fs';
+import {uploadPhotoFailure, uploadPhotoSuccess} from './actions';
+import {UPLOAD_PHOTO_REQUEST} from './types';
 
 function* uploadPhotoSaga(action) {
   try {

@@ -1,7 +1,7 @@
-import {getDeviceStateFailure, getDeviceStateSuccess} from './actions';
 import {put, takeLatest, call} from 'redux-saga/effects';
 import OneSignal from 'react-native-onesignal';
 import {GET_DEVICE_STATE_REQUEST} from './types';
+import {getDeviceStateFailure, getDeviceStateSuccess} from './actions';
 
 function* getDeviceStateSaga(action) {
   try {

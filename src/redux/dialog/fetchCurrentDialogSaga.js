@@ -1,6 +1,6 @@
 import {call, put, takeLatest} from 'redux-saga/effects';
-import {FETCH_CURRENT_DIALOG_REQUEST} from './types';
 import firebase from '../../firebase/firebase';
+import {FETCH_CURRENT_DIALOG_REQUEST} from './types';
 import {sendMessageFailure, fetchCurrentDialogSuccess} from './actions';
 
 function* fetchCurrentDialogSaga(action) {

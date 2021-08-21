@@ -1,7 +1,7 @@
 import {call, put, takeLatest} from 'redux-saga/effects';
-import {SEND_MESSAGE_REQUEST} from './types';
 import firebase from '../../firebase/firebase';
 import {sendMessageSuccess, sendMessageFailure} from './actions';
+import {SEND_MESSAGE_REQUEST} from './types';
 
 function* sendMessageSaga(action) {
   try {
