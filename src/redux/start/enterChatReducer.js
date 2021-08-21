@@ -1,4 +1,4 @@
-import { ENTER_CHAT_RESET, ENTER_CHAT_SUCCESS } from "./types";
+import {ENTER_CHAT_RESET, ENTER_CHAT_SUCCESS} from './types';
 
 const initialState = {
   currentDialogKey: ''

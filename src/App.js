@@ -16,7 +16,7 @@ import {PubNubProvider} from 'pubnub-react';
 import PubNub from 'pubnub';
 import {Camera} from './screens/Camera';
 import {FinishDialog} from './screens/FinishDialog';
-import { PhotoPreview } from "./screens/PhotoPreview";
+import {PhotoPreview} from './screens/PhotoPreview';
 
 Sentry.init({
   dsn: 'https://df9e82dcdbd14fdcb36cbf5816359961@o913672.ingest.sentry.io/5851872'

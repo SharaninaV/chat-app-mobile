@@ -1,24 +1,22 @@
-import React from "react";
-import { RNCamera } from "react-native-camera";
-import { useCamera } from "react-native-camera-hooks";
-import {
-  StyleSheet, Text, TouchableOpacity, View,
-} from "react-native";
-import { useDispatch } from "react-redux";
-import { Actions } from "react-native-router-flux";
-import { saveFilePath } from "../redux/camera/actions";
+import React from 'react';
+import {RNCamera} from 'react-native-camera';
+import {useCamera} from 'react-native-camera-hooks';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {Actions} from 'react-native-router-flux';
+import {saveFilePath} from '../redux/camera/actions';
 
-export const Camera = ({ initialProps }) => {
+export const Camera = ({initialProps}) => {
   const [
-    { cameraRef, type, ratio, autoFocus, autoFocusPoint },
-    { toggleFacing, takePicture },
+    {cameraRef, type, ratio, autoFocus, autoFocusPoint},
+    {toggleFacing, takePicture}
   ] = useCamera(initialProps);
 
   const dispatch = useDispatch();
 
   const handleTakePicture = async () => {
     try {
-      const options = { quality: 0.1 };
+      const options = {quality: 0.1};
       const data = await takePicture(options);
       dispatch(saveFilePath(data.uri));
       Actions.preview();
@@ -27,7 +25,7 @@ export const Camera = ({ initialProps }) => {
     }
   };
 
-  const handleGoBack = event => {
+  const handleGoBack = (event) => {
     Actions.dialog();
   };
 
@@ -45,20 +43,19 @@ export const Camera = ({ initialProps }) => {
         <TouchableOpacity
           testID="button"
           onPress={toggleFacing}
-          style={styles.camera__view__buttons__item}
-        >
-          <Text style={styles.camera__view__buttons__item__text}>Сменить камеру</Text>
+          style={styles.camera__view__buttons__item}>
+          <Text style={styles.camera__view__buttons__item__text}>
+            Сменить камеру
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={handleTakePicture}
-          style={styles.camera__view__buttons__item}
-        >
+          style={styles.camera__view__buttons__item}>
           <Text style={styles.camera__view__buttons__item__text}>Фото</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.camera__view__buttons__item}
-          onPress={handleGoBack}
-        >
+          onPress={handleGoBack}>
           <Text style={styles.camera__view__buttons__item__text}>Назад</Text>
         </TouchableOpacity>
       </View>
@@ -67,25 +64,25 @@ export const Camera = ({ initialProps }) => {
 };
 
 const styles = StyleSheet.create({
-  camera: { flex: 1 },
-  camera__view: { flex: 1 },
+  camera: {flex: 1},
+  camera__view: {flex: 1},
   camera__view__buttons: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   camera__view__buttons__item: {
     flex: 1,
-    backgroundColor: "white",
-    borderColor: "white",
-    alignItems: "center",
+    backgroundColor: 'white',
+    borderColor: 'white',
+    alignItems: 'center',
     padding: 10,
-    height: 70,
+    height: 70
   },
   camera__view__buttons__item__text: {
-    fontFamily: "Montserrat-Medium",
-    textTransform: "uppercase",
-    textAlign: "center",
-    color: "#028dae",
-  },
+    fontFamily: 'Montserrat-Medium',
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    color: '#028dae'
+  }
 });

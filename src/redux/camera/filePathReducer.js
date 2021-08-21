@@ -1,15 +1,15 @@
-import { RESET_FILEPATH, SAVE_FILEPATH } from "./types";
+import {RESET_FILEPATH, SAVE_FILEPATH} from './types';
 
 const initialState = {
-  filePath: "",
+  filePath: ''
 };
 
 export const filePathReducer = (state = initialState, action) => {
   switch (action.type) {
     case SAVE_FILEPATH:
-      return { ...state, filePath: action.payload.filePath };
+      return {...state, filePath: action.payload.filePath};
     case RESET_FILEPATH:
-      return { ...state, filePath: "" };
+      return {...state, filePath: ''};
     default:
       return state;
   }

@@ -6,7 +6,6 @@ import {UPLOAD_PHOTO_REQUEST} from './types';
 
 function* uploadPhotoSaga(action) {
   try {
-    console.log('saga')
     const refMessages = firebase
       .database()
       .ref(
@@ -21,10 +20,8 @@ function* uploadPhotoSaga(action) {
           content: 'data:image/jpg;base64,' + data,
           timestamp: action.payload.message.timestamp,
           writtenBy: action.payload.message.writtenBy
-        }
-        refMessages
-          .set(newMessage)
-          .then(() => console.log('success'));
+        };
+        refMessages.set(newMessage);
       });
     });
     const refActivity = firebase

@@ -7,8 +7,7 @@ function* enterChatSaga(action) {
   try {
     const date = Date.now();
     const refDialogs = yield call(() => firebase.database().ref('dialogs'));
-    const newDialog = yield call(() => {
-      const dialog = {
+    const newDialog = {
         clientName: action.payload.name,
         latestActivity: date,
         operatorID: '',
@@ -25,9 +24,7 @@ function* enterChatSaga(action) {
             writtenBy: 'client'
           }
         }
-      };
-      return dialog;
-    });
+    };
     yield call(() => {
       refDialogs.push(newDialog);
     });
