@@ -29,19 +29,15 @@ export const Start = () => {
   const fetchedThemes = useSelector(fetchedThemesSelector);
   const screen = useSelector(screenSelector);
 
-  const handleSelectTheme = (value, index) => {
+  const handleSelectTheme = (value) => {
     setSelectedThemeKey(value);
-    let arr = [];
-    const subthemesTitles = fetchedThemes.filter(
+    const subthemesTitles = fetchedThemes.find(
       (theme) => theme.key === value
-    )[0].data.subthemes;
-    for (let i = 0; i < subthemesTitles.length; i++) {
-      arr.push({value: i, label: subthemesTitles[i]});
-    }
-    setSubthemes(arr);
+    ).data.subthemes;
+    setSubthemes(subthemesTitles.map((title, index) => ({value: index, label: title})))
   };
 
-  const handleSelectSubtheme = (value, index) => {
+  const handleSelectSubtheme = (value) => {
     setSelectedSubthemeKey(value);
   };
 
