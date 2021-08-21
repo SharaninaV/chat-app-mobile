@@ -14,16 +14,20 @@ import {enterChatRequest, fetchThemesRequest} from '../redux/start/actions';
 import {fetchDialogsRequest} from '../redux/queue/actions';
 import {changeDefaultScreen} from '../redux/asyncStorage/actions';
 import { backgroundImg } from "../const";
+import { fetchedThemesSelector } from "../redux/start/selectors";
+import { screenSelector } from "../redux/asyncStorage/selectors";
 
 export const Start = () => {
   const dispatch = useDispatch();
+
   const [name, setName] = useState();
   const [subthemes, setSubthemes] = useState([]);
   const [selectedThemeKey, setSelectedThemeKey] = useState([]);
   const [selectedSubthemeKey, setSelectedSubthemeKey] = useState();
   const [themes, setThemes] = useState([]);
-  const fetchedThemes = useSelector((state) => state.themes.themes);
-  const screen = useSelector((state) => state.asyncStorage.screen);
+
+  const fetchedThemes = useSelector(fetchedThemesSelector);
+  const screen = useSelector(screenSelector);
 
   const handleSelectTheme = (value, index) => {
     setSelectedThemeKey(value);

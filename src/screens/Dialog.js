@@ -16,14 +16,14 @@ import {uploadPhotoRequest} from '../redux/camera/actions';
 import {fetchCurrentDialogRequest} from '../redux/dialog/actions';
 import {changeDefaultScreen} from '../redux/asyncStorage/actions';
 import { backgroundImg } from "../const";
+import { currentDialogKeySelector } from "../redux/start/selectors";
 
 export const Dialog = () => {
   const dispatch = useDispatch();
 
   const [needRefresh, setNeedRefresh] = useState(false);
-  const currentDialogKey = useSelector(
-    (state) => state.enterChat.currentDialogKey
-  );
+
+  const currentDialogKey = useSelector(currentDialogKeySelector);
 
   const handleFinishDialog = (event) => {
     dispatch(changeDefaultScreen('finish'));

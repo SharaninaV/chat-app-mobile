@@ -10,14 +10,14 @@ import {
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import {resetFilePath, uploadPhotoRequest} from '../redux/camera/actions';
+import { filePathSelector } from "../redux/camera/selectors";
+import { currentDialogKeySelector } from "../redux/start/selectors";
 
 export const PhotoPreview = () => {
   const dispatch = useDispatch();
 
-  const filePath = useSelector((state) => state.filePath.filePath);
-  const currentDialogKey = useSelector(
-    (state) => state.enterChat.currentDialogKey
-  );
+  const filePath = useSelector(filePathSelector);
+  const currentDialogKey = useSelector(currentDialogKeySelector);
 
   const data = async () => {
     return RNFS.readFile(filePath, 'base64').then((data) => ({data}));

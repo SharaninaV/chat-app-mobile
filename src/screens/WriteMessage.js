@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {usePubNub} from 'pubnub-react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {sendMessageRequest} from '../redux/dialog/actions';
+import { currentDialogKeySelector } from "../redux/start/selectors";
 
 export const WriteMessage = () => {
   const dispatch = useDispatch();
@@ -12,9 +13,7 @@ export const WriteMessage = () => {
   const [message, setMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
-  const currentDialogKey = useSelector(
-    (state) => state.enterChat.currentDialogKey
-  );
+  const currentDialogKey = useSelector(currentDialogKeySelector);
 
   const isTypingChannel = currentDialogKey + 'is-typing';
   const currentChannel = currentDialogKey + 'Chat';

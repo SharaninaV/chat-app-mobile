@@ -15,15 +15,15 @@ import {
   fetchDialogStatusRequest
 } from '../redux/queue/actions';
 import { backgroundImg } from "../const";
+import { currentDialogKeySelector } from "../redux/start/selectors";
+import { dialogsSelector, dialogStatusSelector } from "../redux/queue/selectors";
 
 export const Queue = () => {
   const dispatch = useDispatch();
 
-  const dialogs = useSelector((state) => state.dialogs.dialogs);
-  const currentDialogKey = useSelector(
-    (state) => state.enterChat.currentDialogKey
-  );
-  const dialogStatus = useSelector((state) => state.dialogStatus.status);
+  const dialogs = useSelector(dialogsSelector);
+  const currentDialogKey = useSelector(currentDialogKeySelector);
+  const dialogStatus = useSelector(dialogStatusSelector);
 
   const [queuePosition, setQueuePosition] = useState(0);
   const [needStatusRequest, setNeedStatusRequest] = useState(true);

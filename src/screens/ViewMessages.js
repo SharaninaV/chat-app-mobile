@@ -4,20 +4,20 @@ import {useDispatch, useSelector} from 'react-redux';
 import {usePubNub} from 'pubnub-react';
 import {Message} from './Message';
 import {fetchCurrentDialogRequest} from '../redux/dialog/actions';
+import { currentDialogKeySelector } from "../redux/start/selectors";
+import { currentDialogSelector } from "../redux/dialog/selectors";
 
 export const ViewMessages = () => {
   const pubnub = usePubNub();
+
   const dispatch = useDispatch();
 
   const scrollViewRef = useRef();
 
   const [messages, setMessages] = useState([]);
-  const currentDialog = useSelector(
-    (state) => state.currentDialog.currentDialog
-  );
-  const currentDialogKey = useSelector(
-    (state) => state.enterChat.currentDialogKey
-  );
+
+  const currentDialog = useSelector(currentDialogSelector);
+  const currentDialogKey = useSelector(currentDialogKeySelector);
 
   const currentChannel = currentDialogKey + 'Chat';
 

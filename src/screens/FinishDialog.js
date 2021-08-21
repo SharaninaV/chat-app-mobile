@@ -13,13 +13,14 @@ import {finishDialogRequest} from '../redux/finishDialog/actions';
 import {changeDefaultScreen} from '../redux/asyncStorage/actions';
 import {enterChatReset} from '../redux/start/actions';
 import { backgroundImg, reviews } from "../const";
+import { currentDialogKeySelector } from "../redux/start/selectors";
 
 export const FinishDialog = () => {
   const dispatch = useDispatch();
+
   const [rating, setRating] = useState('5');
-  const currentDialogKey = useSelector(
-    (state) => state.enterChat.currentDialogKey
-  );
+
+  const currentDialogKey = useSelector(currentDialogKeySelector);
 
   const handleFinishRating = (value) => {
     setRating(value);
